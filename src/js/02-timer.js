@@ -1,5 +1,7 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from 'notiflix';
+
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -30,7 +32,7 @@ const timerEl = document.querySelector(".timer");
 const startBtn = document.querySelector("[data-start]");
 
 
-startButton.addEventListener('click', onStart)
+startBtn.addEventListener('click', onStart)
 inputEl.addEventListener('input', onInput)
 
 
@@ -47,4 +49,28 @@ const countDate = flatpickr("#datetime-picker", {
 
 function pad(value) {
     return String(value).padStart(2, '0')
+}
+
+
+function onInput() {
+    const today = new Date();
+    if (today >= countDate.selectedDates[0]) {
+        Notiflix.Notify.failure('Choose the future date, please');
+        return 
+    }
+    startBtn.removeAttribute('disabled')
+}
+
+
+function onStart() {
+    Notiflix.Notify.success('Сountdown has started');
+    const intervalId = setInterval(() => {
+        const today = new Date();
+        const countDowndDifference = countDate.selectedDates[0] - today
+        const countDown = convertMs(countDowndDifference)
+        daysEl.textContent = pad(countDown.days)
+        hoursEl.textContent = pad(countDown.hours)
+        minutesEl.textContent = pad(countDown.minutes)
+        secondsEl.textContent = pad(countDown.seconds)
+    }, 1000)
 }
