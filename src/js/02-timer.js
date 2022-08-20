@@ -8,14 +8,13 @@ const hoursEl = document.querySelector("[data-hours]");
 const minutesEl = document.querySelector("[data-minutes]");
 const secondsEl = document.querySelector("[data-seconds]");
 
-const inputEl = document.querySelector("#datetime-picker");
-const timerEl = document.querySelector(".timer");
+// const inputEl = document.querySelector("#datetime-picker");
+// const timerEl = document.querySelector(".timer");
 const startBtn = document.querySelector("[data-start]");
 
 
 startBtn.addEventListener('click', onStart)
-inputEl.addEventListener('input', onInput)
-
+startBtn.setAttribute('disabled', true)
 
 const countDate = flatpickr("#datetime-picker", {
     enableTime: true,
@@ -25,18 +24,14 @@ const countDate = flatpickr("#datetime-picker", {
     minuteIncrement: 1,
     onClose(selectedDates) {
       console.log(selectedDates[0]);
-    },
-})
-
-
-function onInput() {
-    const today = new Date();
-    if (today >= countDate.selectedDates[0]) {
+      const today = new Date();
+      if (today >= countDate.selectedDates[0]) {
         Notiflix.Notify.failure('Choose the future date, please');
         return 
     }
     startBtn.removeAttribute('disabled')
-}
+    },
+})
 
 
 function onStart() {
