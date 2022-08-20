@@ -3,25 +3,6 @@ import "flatpickr/dist/flatpickr.min.css";
 import Notiflix from 'notiflix';
 
 
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  // Remaining days
-  const days = Math.floor(ms / day);
-  // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
-  return { days, hours, minutes, seconds };
-}
-
 const daysEl = document.querySelector("[data-days]");
 const hoursEl = document.querySelector("[data-hours]");
 const minutesEl = document.querySelector("[data-minutes]");
@@ -47,10 +28,6 @@ const countDate = flatpickr("#datetime-picker", {
     },
 })
 
-function pad(value) {
-    return String(value).padStart(2, '0')
-}
-
 
 function onInput() {
     const today = new Date();
@@ -66,11 +43,38 @@ function onStart() {
     Notiflix.Notify.success('Сountdown has started');
     const intervalId = setInterval(() => {
         const today = new Date();
-        const countDowndDifference = countDate.selectedDates[0] - today
-        const countDown = convertMs(countDowndDifference)
-        daysEl.textContent = pad(countDown.days)
-        hoursEl.textContent = pad(countDown.hours)
-        minutesEl.textContent = pad(countDown.minutes)
-        secondsEl.textContent = pad(countDown.seconds)
+      const countDowndDifference = countDate.selectedDates[0] - today;
+       if (countDowndDifference <= 0) {
+            return
+      };
+      const countDown = convertMs(countDowndDifference);
+      daysEl.textContent = pad(countDown.days);
+      hoursEl.textContent = pad(countDown.hours);
+      minutesEl.textContent = pad(countDown.minutes);
+      secondsEl.textContent = pad(countDown.seconds);
     }, 1000)
+}
+
+
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+  return { days, hours, minutes, seconds };
+}
+
+function pad(value) {
+    return String(value).padStart(2, '0')
 }

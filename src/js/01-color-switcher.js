@@ -4,7 +4,8 @@ const stopBtn = document.querySelector(`[data-stop]`);
 startBtn.addEventListener(`click`, startColorizer);
 stopBtn.addEventListener(`click`, stopColorizer);
 
-let btnIsActive = false;
+let intervalId = null;
+stopBtn.setAttribute('disabled', '');
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
@@ -12,14 +13,11 @@ function getRandomHexColor() {
 
 function startColorizer() {
     
-    btnIsActive = false
     startBtn.setAttribute('disabled', '');
-    startBtn.classList.remove(".button-switcher:hover")
     stopBtn.removeAttribute('disabled');
-    const intervalId = setInterval(() => {
-        if (btnIsActive === true) {
+    intervalId = setInterval(() => {
+        if (intervalId === true) {
             clearInterval(intervalId);
-            console.log("interval cleared")
             return
         }
         const randomColor = getRandomHexColor()
@@ -30,8 +28,7 @@ function startColorizer() {
 }
 
 function stopColorizer() {
-    btnIsActive = true
-    console.log("stop click")
+    clearInterval(intervalId);
     startBtn.removeAttribute('disabled');
     stopBtn.setAttribute('disabled', '');
 }
