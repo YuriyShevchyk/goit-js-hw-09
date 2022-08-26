@@ -5,30 +5,29 @@ startBtn.addEventListener(`click`, startColorizer);
 stopBtn.addEventListener(`click`, stopColorizer);
 
 let intervalId = null;
-stopBtn.setAttribute('disabled', '');
+// stopBtn.setAttribute('disabled', true);
+stopBtn.disabled = true;
 
-function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-}
+
 
 function startColorizer() {
-    
-    startBtn.setAttribute('disabled', '');
-    stopBtn.removeAttribute('disabled');
     intervalId = setInterval(() => {
-        if (intervalId === true) {
-            clearInterval(intervalId);
-            return
-        }
-        const randomColor = getRandomHexColor()
-        document.body.style.backgroundColor = randomColor
-    
-    }, 1000)
-    
+        document.body.style.backgroundColor = getRandomHexColor();
+    }, 1000);
+    // startBtn.setAttribute('disabled', true);
+    // stopBtn.removeAttribute('disabled');
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
 }
 
 function stopColorizer() {
     clearInterval(intervalId);
-    startBtn.removeAttribute('disabled');
-    stopBtn.setAttribute('disabled', '');
-}
+    // startBtn.removeAttribute('disabled');
+    // stopBtn.setAttribute('disabled', true);
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+};
+
+function getRandomHexColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    };
